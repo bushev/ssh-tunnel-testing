@@ -1,0 +1,9 @@
+version: '3'
+services:
+  server:
+    build: .
+    volumes:
+        - ./sshd_custom.conf:/etc/ssh/sshd_config
+        - ./key.pub:/root/.ssh/authorized_keys
+    ports:
+        - '2222:22'
