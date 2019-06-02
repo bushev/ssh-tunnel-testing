@@ -1,9 +1,20 @@
 version: '3'
 services:
-  server:
+
+  ssh_tunnel_linux:
+    container_name: ssh_tunnel_linux
     build: .
     volumes:
-        - ./sshd_custom.conf:/etc/ssh/sshd_config
-        - ./key.pub:/root/.ssh/authorized_keys
+      - ./sshd_custom.conf:/etc/ssh/sshd_config
+      - ./key.pub:/root/.ssh/authorized_keys
     ports:
-        - '2222:22'
+      - '2222:22'
+
+  ssh_tunnel_linux_pam:
+    container_name: ssh_tunnel_linux_pam
+    build: .
+    volumes:
+      - ./ssh-two-factor-google-authenticator/sshd_config:/etc/ssh/sshd_config
+      - ./ssh-two-factor-google-authenticator/sshd:/etc/pam.d/sshd
+    ports:
+      - '3333:22'
