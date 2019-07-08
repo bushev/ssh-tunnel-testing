@@ -1,20 +1,71 @@
 version: '3'
 services:
 
-  ssh_tunnel_linux:
-    container_name: ssh_tunnel_linux
+  # ssh -v root@localhost -p 2222 -o PreferredAuthentications=password
+  ssh_tunnel_plain_password:
+    container_name: ssh_tunnel_plain_password
     build: .
     volumes:
-      - ./sshd_custom.conf:/etc/ssh/sshd_config
-      - ./key.pub:/root/.ssh/authorized_keys
+      - ./sshd/plain_password/sshd_config:/etc/ssh/sshd_config
     ports:
       - '2222:22'
 
-  ssh_tunnel_linux_pam:
-    container_name: ssh_tunnel_linux_pam
+  # ssh -v root@localhost -p 2223 -o PreferredAuthentications=keyboard-interactive
+  ssh_tunnel_plain_password_keyboard_interaction:
+    container_name: ssh_tunnel_plain_password_keyboard_interaction
     build: .
     volumes:
-      - ./ssh-two-factor-google-authenticator/sshd_config:/etc/ssh/sshd_config
-      - ./ssh-two-factor-google-authenticator/sshd:/etc/pam.d/sshd
+      - ./sshd/plain_password_keyboard_interaction/sshd_config:/etc/ssh/sshd_config
+    ports:
+      - '2223:22'
+
+  # ssh -v root@localhost -p 3333 -o PreferredAuthentications=keyboard-interactive
+  ssh_tunnel_pam_ga:
+    container_name: ssh_tunnel_pam_ga
+    build: .
+    volumes:
+      - ./sshd/pam_ga/sshd_config:/etc/ssh/sshd_config
+      - ./sshd/pam_ga/sshd:/etc/pam.d/sshd
     ports:
       - '3333:22'
+
+  # ssh -v root@localhost -p 4444 -o PreferredAuthentications=keyboard-interactive
+  ssh_tunnel_pam_yubikey:
+    container_name: ssh_tunnel_pam_yubikey
+    build: .
+    volumes:
+      - ./sshd/pam_yubikey/sshd_config:/etc/ssh/sshd_config
+      - ./sshd/pam_yubikey/sshd:/etc/pam.d/sshd
+      - ./sshd/pam_yubikey/yubikey_mappings:/etc/yubikey_mappings
+    ports:
+      - '4444:22'
+
+  # ssh -v root@localhost -p 5555 -i ./keys/id_openssh_passphraseless_rsa
+  ssh_tunnel_openssh_rsa_pk:
+    container_name: ssh_tunnel_openssh_rsa_pk
+    build: .
+    volumes:
+      - ./sshd/simple_pk/sshd_config:/etc/ssh/sshd_config
+      - ./keys/public/id_openssh_passphraseless_rsa.pub:/root/.ssh/authorized_keys
+    ports:
+      - '5555:22'
+
+  # ssh -v root@localhost -p 5556 -i ./keys/id_pem_ecdsa
+  ssh_tunnel_pem_ecdsa_pk:
+    container_name: ssh_tunnel_pem_ecdsa_pk
+    build: .
+    volumes:
+      - ./sshd/simple_pk/sshd_config:/etc/ssh/sshd_config
+      - ./keys/public/id_pem_ecdsa.pub:/root/.ssh/authorized_keys
+    ports:
+      - '5556:22'
+
+  # ssh -v root@localhost -p 5557 -i ./keys/id_openssh_passphraseless_ecdsa
+  ssh_tunnel_openssh_ecdsa_no_pw_pk:
+    container_name: ssh_tunnel_openssh_ecdsa_no_pw_pk
+    build: .
+    volumes:
+      - ./sshd/simple_pk/sshd_config:/etc/ssh/sshd_config
+      - ./keys/public/id_openssh_passphraseless_ecdsa.pub:/root/.ssh/authorized_keys
+    ports:
+      - '5557:22'
