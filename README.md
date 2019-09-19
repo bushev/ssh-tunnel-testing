@@ -22,7 +22,7 @@ Test [SSH Tunnel](https://itunes.apple.com/us/app/ssh-tunnel/id1260223542) iOS a
 
 > User: **root** Password: **my_password** Port: **3333**
 
-1. Attach to container: `docker exec -it ssh_tunnel_linux_pam /bin/bash`
+1. Attach to container: `docker exec -it ssh_tunnel_pam_ga /bin/bash`
 2. Configure PAM (Google Authenticator) by running `google-authenticator`
 3. Connect `ssh root@localhost -p 3333`
 
