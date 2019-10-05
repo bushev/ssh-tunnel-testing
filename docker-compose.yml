@@ -79,3 +79,11 @@ services:
       - ./keys/public/id_openssh_passphraseless_ed25519.pub:/root/.ssh/authorized_keys
     ports:
       - '5558:22'
+
+  ssh_tunnel_do_appstore_review:
+    container_name: ssh_tunnel_do_appstore_review
+    build: .
+    volumes:
+      - ./sshd/plain_password/sshd_config:/etc/ssh/sshd_config
+    ports:
+      - '7777:22'
